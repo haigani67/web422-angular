@@ -1,0 +1,61 @@
+<h2>album name: {{ album.name }}</h2>
+<br />
+<h4>The tracks</h4>
+<p>"Click the icon to add a song to your favourites list</p>
+
+<mat-card>
+  <mat-card-content fxLayout="row wrap" fxLayout.xs="column">
+    <div fxflex>
+      <img
+        [src]="album.images[0].url"
+        alt="album cover"
+        [style.margin]="'10px'"
+        [style.width]="'90%'"
+        [style.height]="'70%'"
+      />
+    </div>
+    <div fxFlex>
+      <div [style.min-width]="'300px'" [style.margin]="'10px'">
+        <strong>Record Label: </strong> {{ album.label }}<br />
+        <strong>Release Date: </strong> {{ album.release_date }}<br /><br />
+        <strong>Tracks:</strong> {{ album.total_tracks }}<br />
+        <strong>Popularity: </strong>{{ album.popularity }}<br /><br />
+
+        <mat-chip-list aria-label="Artist selection">
+          <a
+            *ngFor="let artistName of album.artists"
+            [routerLink]="['/artist', artistName.id]"
+          >
+            <mat-chip>{{ artistName.name }}</mat-chip>
+          </a>
+        </mat-chip-list>
+        <br />
+
+        <div *ngFor="let CR of album.copyrights">{{ CR.text }}</div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+<br /><br />
+<h2>Track Listing</h2>
+
+<mat-list role="list">
+  <!-- Single "Responsive" Material List Item-->
+  <mat-list-item role="listitem" *ngFor="let track of album.tracks.items">
+    <mat-icon mat-list-icon (click)="addToFavourites(track.id)"
+      >queue_music</mat-icon
+    >
+    <div mat-line>
+      <mat-card>
+        <mat-card-content>
+          <div *ngIf="track.preview_url">
+            <br /><audio controls [src]="track.preview_url"></audio>
+          </div>
+          {{ track.name }}
+          {{ (track.duration_ms / 60000).toFixed(2) }}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-list-item>
+  <!-- -->
+</mat-list>
